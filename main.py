@@ -1,4 +1,14 @@
-import numpy
+"""
+Written by :
+Name: Amit Ovadia, 207634791
+Name: Rona Nazarov, 207134446
+"""
+
+def zeros_list(len):
+    lst = []
+    for i in range(0, len):
+        lst.append(0)
+    return lst
 
 
 def get_eqs():
@@ -44,15 +54,17 @@ def jacobs_method(A, b, max_iterations):
         return
 
     epsilon = 0.001
-    x = prev_x = numpy.zeros(len(A))
+    prev_x = zeros_list(len(A))
+    x = zeros_list(len(A))
     for i in range(0, max_iterations):
+        prev_x = x.copy()
         for j in range(0, len(A)):
             sum_row = b[j]
             for k in range(0, len(A)):
                 if j != k:
                     sum_row -= A[j][k] * prev_x[k]
             x[j] = sum_row / A[j][j]
-        if x[0] - prev_x[0] < epsilon:
+        if abs(x[0] - prev_x[0]) < epsilon:
             return x
     return x
 
@@ -63,21 +75,23 @@ def gauss_method(A, b, max_iterations):
         return
 
     epsilon = 0.001
-    x = prev_x = numpy.zeros(len(A))
+    prev_x = zeros_list(len(A))
+    x = zeros_list(len(A))
     for i in range(0, max_iterations):
         for j in range(0, len(A)):
             sum_row = b[j]
             for k in range(0, len(A)):
                 if j != k:
                     sum_row -= A[j][k] * x[k]
-            prev_x[x] = x[j]
+            prev_x[j] = x[j]
             x[j] = sum_row / A[j][j]
-        if x[0] - prev_x[0] < epsilon:
+        if abs(x[0] - prev_x[0]) < epsilon:
             return x
+
     return x
 
 
 A = get_eqs()
-b = get_b_vector()
+b = get_b_vector(A)
 print(jacobs_method(A, b, 20))
 print(gauss_method(A, b, 20))
